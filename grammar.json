@@ -1,0 +1,338 @@
+[
+  {
+    "id": 1,
+    "title": "ضمیر",
+    "subtitle": "شخصی ضمیریں",
+    "explanation": "اردو میں ضمیر وہ الفاظ ہیں جو اسم کی جگہ استعمال ہوتے ہیں۔ بنیادی ضمیریں یہ ہیں: میں، تم، آپ، وہ، یہ، ہم۔ عزت کے ساتھ بات کرنے کے لیے ہمیشہ 'آپ' استعمال کریں۔",
+    "examples": [
+      {
+        "urdu": "میں طالب علم ہوں۔",
+        "transliteration": "Main talib-e-ilm hoon.",
+        "meaning": "I am a student."
+      },
+      {
+        "urdu": "تم میرے دوست ہو۔",
+        "transliteration": "Tum mere dost ho.",
+        "meaning": "You are my friend. (informal)"
+      },
+      {
+        "urdu": "آپ کیسے ہیں؟",
+        "transliteration": "Aap kaise hain?",
+        "meaning": "How are you? (formal/respectful)"
+      },
+      {
+        "urdu": "وہ استاد ہیں۔",
+        "transliteration": "Woh ustad hain.",
+        "meaning": "He/She is a teacher."
+      },
+      {
+        "urdu": "ہم سکول جاتے ہیں۔",
+        "transliteration": "Hum school jate hain.",
+        "meaning": "We go to school."
+      }
+    ],
+    "exercise": {
+      "question": "درست ضمیر منتخب کریں: ___ طالب علم ہوں۔",
+      "options": [
+        "میں",
+        "تم",
+        "وہ",
+        "آپ"
+      ],
+      "correctAnswer": 0
+    }
+  },
+  {
+    "id": 2,
+    "title": "حال",
+    "subtitle": "ہوں / ہے / ہیں",
+    "explanation": "حال کے زمانے میں 'ہونا' فعل کی شکلیں یہ ہیں: ہوں (میں کے لیے)، ہو (تم کے لیے)، ہے (وہ/یہ کے لیے)، ہیں (آپ/ہم/وہ جمع کے لیے)۔",
+    "examples": [
+      {
+        "urdu": "میں خوش ہوں۔",
+        "transliteration": "Main khush hoon.",
+        "meaning": "I am happy."
+      },
+      {
+        "urdu": "تم تھکے ہو۔",
+        "transliteration": "Tum thake ho.",
+        "meaning": "You are tired."
+      },
+      {
+        "urdu": "وہ ڈاکٹر ہے۔",
+        "transliteration": "Woh doctor hai.",
+        "meaning": "He/She is a doctor."
+      },
+      {
+        "urdu": "آپ صحیح ہیں۔",
+        "transliteration": "Aap sahi hain.",
+        "meaning": "You are correct. (formal)"
+      },
+      {
+        "urdu": "ہم گھر میں ہیں۔",
+        "transliteration": "Hum ghar mein hain.",
+        "meaning": "We are at home."
+      },
+      {
+        "urdu": "یہ کتاب ہے۔",
+        "transliteration": "Yeh kitab hai.",
+        "meaning": "This is a book."
+      }
+    ],
+    "exercise": {
+      "question": "صحیح فعل منتخب کریں: میں طالب علم ___۔",
+      "options": [
+        "ہوں",
+        "ہو",
+        "ہے",
+        "ہیں"
+      ],
+      "correctAnswer": 0
+    }
+  },
+  {
+    "id": 3,
+    "title": "ماضی",
+    "subtitle": "تھا / تھی / تھے",
+    "explanation": "ماضی میں 'تھا' استعمال ہوتا ہے۔ مذکر واحد کے لیے 'تھا'، مؤنث واحد کے لیے 'تھی' اور جمع کے لیے 'تھے' استعمال ہوتا ہے۔",
+    "examples": [
+      {
+        "urdu": "میں بیمار تھا۔",
+        "transliteration": "Main bimar tha.",
+        "meaning": "I was sick. (masculine)"
+      },
+      {
+        "urdu": "وہ خوش تھی۔",
+        "transliteration": "Woh khush thi.",
+        "meaning": "She was happy. (feminine)"
+      },
+      {
+        "urdu": "ہم سکول میں تھے۔",
+        "transliteration": "Hum school mein the.",
+        "meaning": "We were at school."
+      },
+      {
+        "urdu": "کتاب میز پر تھی۔",
+        "transliteration": "Kitab mez par thi.",
+        "meaning": "The book was on the table."
+      },
+      {
+        "urdu": "بچے باغ میں تھے۔",
+        "transliteration": "Bachhe bagh mein the.",
+        "meaning": "The children were in the garden."
+      }
+    ],
+    "exercise": {
+      "question": "صحیح فعل منتخب کریں: وہ (لڑکی) خوش ___۔",
+      "options": [
+        "تھا",
+        "تھی",
+        "تھے",
+        "ہے"
+      ],
+      "correctAnswer": 1
+    }
+  },
+  {
+    "id": 4,
+    "title": "جملے کی ترتیب",
+    "subtitle": "فاعل - مفعول - فعل",
+    "explanation": "اردو میں جملے کی بنیادی ترتیب یہ ہے: فاعل - مفعول - فعل۔ مثال کے طور پر: 'میں کتاب پڑھتا ہوں'۔",
+    "examples": [
+      {
+        "urdu": "میں سیب کھاتا ہوں۔",
+        "transliteration": "Main seb khata hoon.",
+        "meaning": "I eat an apple."
+      },
+      {
+        "urdu": "وہ اردو بولتی ہے۔",
+        "transliteration": "Woh Urdu bolti hai.",
+        "meaning": "She speaks Urdu."
+      },
+      {
+        "urdu": "ہم کرکٹ کھیلتے ہیں۔",
+        "transliteration": "Hum cricket khelte hain.",
+        "meaning": "We play cricket."
+      },
+      {
+        "urdu": "بچے پانی پیتے ہیں۔",
+        "transliteration": "Bachhe pani peete hain.",
+        "meaning": "Children drink water."
+      }
+    ],
+    "exercise": {
+      "question": "صحیح ترتیب منتخب کریں:",
+      "options": [
+        "میں کتاب پڑھتا ہوں",
+        "کتاب میں پڑھتا ہوں",
+        "پڑھتا ہوں میں کتاب",
+        "میں پڑھتا کتاب ہوں"
+      ],
+      "correctAnswer": 0
+    }
+  },
+  {
+    "id": 5,
+    "title": "عام فقرے",
+    "subtitle": "ادب والے روزمرہ جملے",
+    "explanation": "روزمرہ کی گفتگو میں یہ فقرے بہت مفید ہیں۔ ان کا استعمال آپ کو مہذب اور شائستہ بناتا ہے۔",
+    "examples": [
+      {
+        "urdu": "السلام علیکم",
+        "transliteration": "Assalam-o-Alaikum",
+        "meaning": "Peace be upon you (greeting)"
+      },
+      {
+        "urdu": "وعلیکم السلام",
+        "transliteration": "Wa-Alaikum-Assalam",
+        "meaning": "And peace be upon you (response)"
+      },
+      {
+        "urdu": "شکریہ",
+        "transliteration": "Shukriya",
+        "meaning": "Thank you"
+      },
+      {
+        "urdu": "براہ کرم",
+        "transliteration": "Barah-e-karam",
+        "meaning": "Please"
+      },
+      {
+        "urdu": "معاف کیجیے",
+        "transliteration": "Maaf kijiye",
+        "meaning": "Sorry / Excuse me"
+      },
+      {
+        "urdu": "خدا حافظ",
+        "transliteration": "Khuda Hafiz",
+        "meaning": "Goodbye (God protect you)"
+      },
+      {
+        "urdu": "آپ کا نام کیا ہے؟",
+        "transliteration": "Aap ka naam kya hai?",
+        "meaning": "What is your name?"
+      },
+      {
+        "urdu": "میرا نام ___ ہے۔",
+        "transliteration": "Mera naam ___ hai.",
+        "meaning": "My name is ___."
+      },
+      {
+        "urdu": "آپ کیسے ہیں؟",
+        "transliteration": "Aap kaise hain?",
+        "meaning": "How are you?"
+      },
+      {
+        "urdu": "میں ٹھیک ہوں، شکریہ۔",
+        "transliteration": "Main theek hoon, shukriya.",
+        "meaning": "I am fine, thank you."
+      }
+    ],
+    "exercise": {
+      "question": "کسی سے ملتے وقت کیا کہنا چاہیے؟",
+      "options": [
+        "السلام علیکم",
+        "خدا حافظ",
+        "شکریہ",
+        "معاف کیجیے"
+      ],
+      "correctAnswer": 0
+    }
+  },
+  {
+    "id": 6,
+    "title": "سوالیہ الفاظ",
+    "subtitle": "سوال بنانے کے الفاظ",
+    "explanation": "اردو میں سوال پوچھنے کے لیے یہ الفاظ استعمال ہوتے ہیں: کیا، کون، کہاں، کب، کیوں، کیسے۔",
+    "examples": [
+      {
+        "urdu": "آپ کا نام کیا ہے؟",
+        "transliteration": "Aap ka naam kya hai?",
+        "meaning": "What is your name?"
+      },
+      {
+        "urdu": "یہ کون ہے؟",
+        "transliteration": "Yeh kaun hai?",
+        "meaning": "Who is this?"
+      },
+      {
+        "urdu": "آپ کہاں رہتے ہیں؟",
+        "transliteration": "Aap kahan rehte hain?",
+        "meaning": "Where do you live?"
+      },
+      {
+        "urdu": "آپ کب آئیں گے؟",
+        "transliteration": "Aap kab aayein ge?",
+        "meaning": "When will you come?"
+      },
+      {
+        "urdu": "آپ کیوں دیر سے آئے؟",
+        "transliteration": "Aap kyun der se aaye?",
+        "meaning": "Why did you come late?"
+      },
+      {
+        "urdu": "یہ کیسے ہوا؟",
+        "transliteration": "Yeh kaise hua?",
+        "meaning": "How did this happen?"
+      }
+    ],
+    "exercise": {
+      "question": "صحیح سوالیہ لفظ منتخب کریں: آپ ___ رہتے ہیں؟",
+      "options": [
+        "کہاں",
+        "کیا",
+        "کون",
+        "کیوں"
+      ],
+      "correctAnswer": 0
+    }
+  },
+  {
+    "id": 7,
+    "title": "صفت",
+    "subtitle": "اسم کی کیفیت بیان کرنا",
+    "explanation": "صفت وہ الفاظ ہیں جو اسم کی خوبی یا حالت بیان کرتے ہیں۔ اردو میں صفت عموماً اسم سے پہلے آتی ہے، جیسے 'اچھا لڑکا'۔ صفتیں مذکر/مؤنث اور واحد/جمع کے مطابق بدلتی ہیں۔",
+    "examples": [
+      {
+        "urdu": "بڑا گھر",
+        "transliteration": "Bara ghar",
+        "meaning": "Big house"
+      },
+      {
+        "urdu": "چھوٹی گاڑی",
+        "transliteration": "Chhoti gaari",
+        "meaning": "Small car"
+      },
+      {
+        "urdu": "خوبصورت پھول",
+        "transliteration": "Khubsurat phool",
+        "meaning": "Beautiful flower"
+      },
+      {
+        "urdu": "نیا کمرہ",
+        "transliteration": "Naya kamra",
+        "meaning": "New room"
+      },
+      {
+        "urdu": "پرانی کتاب",
+        "transliteration": "Purani kitab",
+        "meaning": "Old book"
+      },
+      {
+        "urdu": "تیز رفتار",
+        "transliteration": "Tez raftaar",
+        "meaning": "Fast speed"
+      }
+    ],
+    "exercise": {
+      "question": "صحیح صفت منتخب کریں: ___ لڑکی",
+      "options": [
+        "خوبصورت",
+        "بڑا",
+        "نیا",
+        "تیز"
+      ],
+      "correctAnswer": 0
+    }
+  }
+]

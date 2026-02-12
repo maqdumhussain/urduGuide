@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urdu Learning Platform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">Urdu Guide</h1>
+            <div class="header-controls">
+                <button id="darkModeToggle" class="icon-btn" title="Toggle dark mode" aria-label="Toggle dark mode">
+                    <span class="icon">🌙</span>
+                </button>
+                <div class="streak-display" id="streakDisplay">
+                    <span class="icon">🔥</span>
+                    <span class="streak-label">Streak</span>
+                    <span id="streakCount">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="stories">
+                    <span class="icon">📚</span>
+                    <span>Stories</span>
+                </button>
+                <button class="nav-tab" data-tab="grammar">
+                    <span class="icon">📖</span>
+                    <span>Grammar</span>
+                </button>
+                <button class="nav-tab" data-tab="vocabulary">
+                    <span class="icon">💾</span>
+                    <span>My Words</span>
+                </button>
+            </nav>
+
+            <!-- Stories Sidebar Content -->
+            <div class="sidebar-content" id="storiesSidebar">
+                <div class="filters">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search stories...">
+                    <select id="difficultyFilter" class="filter-select">
+                        <option value="all">All Levels</option>
+                        <option value="1">Level 1 - Very Easy</option>
+                        <option value="2">Level 2 - Easy</option>
+                        <option value="3">Level 3 - Medium</option>
+                        <option value="4">Level 4 - Hard</option>
+                        <option value="5">Level 5 - Very Hard</option>
+                    </select>
+                </div>
+                <div class="stories-list" id="storiesList">
+                    <!-- Stories will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Grammar Sidebar Content -->
+            <div class="sidebar-content hidden" id="grammarSidebar">
+                <div class="grammar-list" id="grammarList">
+                    <!-- Grammar lessons will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Vocabulary Sidebar Content -->
+            <div class="sidebar-content hidden" id="vocabularySidebar">
+                <div class="vocab-controls">
+                    <button id="quizModeBtn" class="secondary-btn">Start Quiz</button>
+                    <button id="clearVocabBtn" class="secondary-btn danger">Clear All</button>
+                </div>
+                <div class="saved-words-list" id="savedWordsList">
+                    <!-- Saved words will be loaded here -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content" id="mainContent">
+            <div class="notice hidden" id="localNotice" role="status" aria-live="polite">
+                <strong>Local file mode detected.</strong>
+                <p>Your browser blocks JSON fetch when opening files directly. Run a local server, then open the site from the server.</p>
+                <div class="notice-code">Run: <code>python3 -m http.server</code> then open <code>http://localhost:8000</code></div>
+            </div>
+
+            <!-- Welcome Screen -->
+            <div class="welcome-screen" id="welcomeScreen">
+                <div class="welcome-content">
+                    <h2>Welcome to Urdu Guide</h2>
+                    <p class="welcome-subtitle">Read simple Urdu, grow vocabulary, and build grammar basics.</p>
+                    <div class="welcome-features">
+                        <div class="feature-card">
+                            <span class="feature-icon">📚</span>
+                            <h3>Read Stories</h3>
+                            <p>Short Urdu stories with gentle difficulty progression.</p>
+                        </div>
+                        <div class="feature-card">
+                            <span class="feature-icon">📖</span>
+                            <h3>Learn Grammar</h3>
+                            <p>Beginner-friendly lessons with examples and practice.</p>
+                        </div>
+                        <div class="feature-card">
+                            <span class="feature-icon">💾</span>
+                            <h3>Save Words</h3>
+                            <p>Tap any word to save it and build your personal list.</p>
+                        </div>
+                    </div>
+                    <p class="welcome-instruction">Choose a story from the left to begin.</p>
+                    <div class="continue-section hidden" id="continueSection">
+                        <p class="continue-text" id="continueText">Continue where you left off:</p>
+                        <button class="primary-btn" id="continueBtn">Continue Reading</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reading View -->
+            <div class="reading-view hidden" id="readingView">
+                <div class="reading-header">
+                    <button id="backBtn" class="back-btn">Back</button>
+                    <div class="story-info">
+                        <h2 id="storyTitle" class="urdu"></h2>
+                        <div class="chapter-info" id="chapterInfo"></div>
+                    </div>
+                </div>
+
+                <!-- Reading Controls -->
+                <div class="reading-controls">
+                    <div class="control-group">
+                        <label>
+                            <input type="checkbox" id="transliterationToggle">
+                            <span>Show transliteration</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" id="englishToggle">
+                            <span>Show English meaning</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" id="highlightDifficultToggle">
+                            <span>Highlight difficult words</span>
+                        </label>
+                    </div>
+                    <div class="control-group">
+                        <label>
+                            <span>Font size:</span>
+                            <input type="range" id="fontSizeSlider" min="16" max="32" value="20" step="2">
+                            <span id="fontSizeValue">20</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" id="lineSpacingToggle">
+                            <span>Extra line spacing</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Story Content -->
+                <div class="story-content" id="storyContent">
+                    <!-- Content will be loaded here -->
+                </div>
+
+                <!-- Vocabulary Section -->
+                <div class="vocab-section">
+                    <h3>Vocabulary for this chapter</h3>
+                    <div class="vocab-grid" id="vocabGrid">
+                        <!-- Vocabulary will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Chapter Navigation -->
+                <div class="chapter-navigation" id="chapterNavigation">
+                    <button id="prevChapterBtn" class="nav-btn">Previous Chapter</button>
+                    <button id="nextChapterBtn" class="nav-btn">Next Chapter</button>
+                </div>
+            </div>
+
+            <!-- Grammar View -->
+            <div class="grammar-view hidden" id="grammarView">
+                <div class="grammar-header">
+                    <button id="grammarBackBtn" class="back-btn">Back</button>
+                    <h2 id="grammarTitle" class="urdu"></h2>
+                </div>
+                <div class="grammar-content" id="grammarContent">
+                    <!-- Grammar lesson will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Quiz View -->
+            <div class="quiz-view hidden" id="quizView">
+                <div class="quiz-header">
+                    <button id="quizBackBtn" class="back-btn">Back</button>
+                    <h2>Vocabulary Quiz</h2>
+                    <div class="quiz-score">
+                        <span id="quizScore">0</span> / <span id="quizTotal">0</span>
+                    </div>
+                </div>
+                <div class="quiz-content" id="quizContent">
+                    <!-- Quiz questions will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Word Tooltip -->
+    <div class="word-tooltip hidden" id="wordTooltip">
+        <div class="tooltip-word urdu" id="tooltipWord"></div>
+        <div class="tooltip-transliteration" id="tooltipTransliteration"></div>
+        <div class="tooltip-meaning" id="tooltipMeaning"></div>
+        <button class="tooltip-save-btn" id="tooltipSaveBtn">Save word</button>
+    </div>
+
+
+    <!-- Inline JSON fallback for file:// mode -->
+    <script id="storiesData" type="application/json">
+[
+  {
+    "id": 1,
+    "title": "میرا گھر",
+    "description": "گھر کے بارے میں آسان کہانی",
+    "difficulty": 1,
+    "chapters": [
+      {
+        "chapterNumber": 1,
+        "urduText": "میرا نام احمد ہے۔ میں ایک گھر میں رہتا ہوں۔ میرا گھر چھوٹا ہے۔ گھر میں تین کمرے ہیں۔ ایک باورچی خانہ ہے۔ میرے ماں باپ میرے ساتھ رہتے ہیں۔ میں اپنے گھر سے محبت کرتا ہوں۔",
+        "transliteration": "Mera naam Ahmad hai. Main aik ghar mein rehta hoon. Mera ghar chhota hai. Ghar mein teen kamre hain. Aik bawarchi khana hai. Mere maan baap mere saath rehte hain. Main apne ghar se mohabbat karta hoon.",
+        "englishMeaning": "My name is Ahmad. I live in a house. My house is small. There are three rooms in the house. There is one kitchen. My parents live with me. I love my house.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "باورچی",
+            "transliteration": "bawarchi",
+            "meaning": "cook/kitchen"
+          },
+          {
+            "word": "محبت",
+            "transliteration": "mohabbat",
+            "meaning": "love"
+          }
+        ],
+        "difficultWords": [
+          "باورچی",
+          "محبت"
+        ]
+      },
+      {
+        "chapterNumber": 2,
+        "urduText": "صبح میں میں اٹھتا ہوں۔ میں ناشتہ کرتا ہوں۔ پھر میں سکول جاتا ہوں۔ شام کو میں واپس آتا ہوں۔ میں اپنا کمرہ صاف کرتا ہوں۔ رات کو ہم مل کر کھانا کھاتے ہیں۔ میں خوش ہوں۔",
+        "transliteration": "Subah mein main uthta hoon. Main nashta karta hoon. Phir main school jata hoon. Shaam ko main wapas aata hoon. Main apna kamra saaf karta hoon. Raat ko hum mil kar khana khate hain. Main khush hoon.",
+        "englishMeaning": "In the morning I wake up. I have breakfast. Then I go to school. In the evening I come back. I clean my room. At night we eat together. I am happy.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "ناشتہ",
+            "transliteration": "nashta",
+            "meaning": "breakfast"
+          }
+        ],
+        "difficultWords": [
+          "ناشتہ"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "باغ میں سیر",
+    "description": "باغ کی سیر پر مختصر کہانی",
+    "difficulty": 1,
+    "chapters": [
+      {
+        "chapterNumber": 1,
+        "urduText": "آج اتوار ہے۔ میں اور میری بہن باغ میں جاتے ہیں۔ باغ بڑا اور خوبصورت ہے۔ وہاں بہت سے پھول ہیں۔ لال، پیلے اور سفید پھول۔ درخت بھی ہیں۔ ہوا ٹھنڈی ہے۔ ہم خوش ہیں۔",
+        "transliteration": "Aaj itwaar hai. Main aur meri behan bagh mein jate hain. Bagh bara aur khubsurat hai. Wahan bohat se phool hain. Laal, peele aur safed phool. Darakht bhi hain. Hawa thandi hai. Hum khush hain.",
+        "englishMeaning": "Today is Sunday. My sister and I go to the garden. The garden is big and beautiful. There are many flowers. Red, yellow and white flowers. There are also trees. The air is cool. We are happy.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "خوبصورت",
+            "transliteration": "khubsurat",
+            "meaning": "beautiful"
+          }
+        ],
+        "difficultWords": [
+          "خوبصورت"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "میرا دوست",
+    "description": "دوستی کے بارے میں کہانی",
+    "difficulty": 2,
+    "chapters": [
+      {
+        "chapterNumber": 1,
+        "urduText": "علی میرا سب سے اچھا دوست ہے۔ ہم دونوں ایک ہی کلاس میں پڑھتے ہیں۔ وہ بہت مہربان اور ہنس مکھ ہے۔ علی کو کرکٹ کھیلنا پسند ہے۔ میں اور وہ اکثر ساتھ کھیلتے ہیں۔ کبھی کبھی ہم لائبریری میں کتابیں پڑھتے ہیں۔ علی ریاضی میں بہت اچھا ہے۔ وہ مجھے مشکل سوالوں میں مدد کرتا ہے۔",
+        "transliteration": "Ali mera sab se achha dost hai. Hum dono aik hi class mein parhte hain. Woh bohat meharbaan aur hans mukh hai. Ali ko cricket khelna pasand hai. Main aur woh aksar saath khelte hain. Kabhi kabhi hum library mein kitabein parhte hain. Ali riyazi mein bohat achha hai. Woh mujhe mushkil sawaloon mein madad karta hai.",
+        "englishMeaning": "Ali is my best friend. We both study in the same class. He is very kind and cheerful. Ali likes to play cricket. He and I often play together. Sometimes we read books in the library. Ali is very good at mathematics. He helps me with difficult questions.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "مہربان",
+            "transliteration": "meharbaan",
+            "meaning": "kind/compassionate"
+          },
+          {
+            "word": "لائبریری",
+            "transliteration": "library",
+            "meaning": "library"
+          },
+          {
+            "word": "ریاضی",
+            "transliteration": "riyazi",
+            "meaning": "mathematics"
+          }
+        ],
+        "difficultWords": [
+          "مہربان",
+          "ریاضی",
+          "لائبریری"
+        ]
+      },
+      {
+        "chapterNumber": 2,
+        "urduText": "گزشتہ ہفتے علی بیمار ہو گیا۔ اس کو بخار تھا۔ میں اس کے گھر گیا۔ میں اس کے لیے کتابیں اور نوٹس لے کر گیا۔ اس کی والدہ نے مجھے چائے دی۔ میں نے علی کو سکول کا سارا کام بتایا۔ وہ بہت خوش ہوا۔ اس نے کہا کہ میں اچھا دوست ہوں۔ اب علی ٹھیک ہو گیا ہے۔ ہم پھر ساتھ ہیں۔",
+        "transliteration": "Guzishta hafte Ali bimar ho gaya. Us ko bukhar tha. Main us ke ghar gaya. Main us ke liye kitabein aur notes le kar gaya. Us ki walida ne mujhe chai di. Main ne Ali ko school ka sara kaam bataya. Woh bohat khush hua. Us ne kaha ke main achha dost hoon. Ab Ali theek ho gaya hai. Hum phir saath hain.",
+        "englishMeaning": "Last week Ali became sick. He had a fever. I went to his house. I brought books and notes for him. His mother gave me tea. I told Ali all the school work. He was very happy. He said that I am a good friend. Now Ali has recovered. We are together again.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "گزشتہ",
+            "transliteration": "guzishta",
+            "meaning": "last/previous"
+          },
+          {
+            "word": "والدہ",
+            "transliteration": "walida",
+            "meaning": "mother (formal)"
+          }
+        ],
+        "difficultWords": [
+          "گزشتہ",
+          "والدہ"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "بارش کا دن",
+    "description": "بارش کے دن کی کیفیت",
+    "difficulty": 2,
+    "chapters": [
+      {
+        "chapterNumber": 1,
+        "urduText": "آسمان میں کالے بادل چھائے ہوئے تھے۔ ہوا تیز چل رہی تھی۔ درخت ہل رہے تھے۔ پرندے اپنے گھونسلوں میں چھپ گئے۔ اچانک بجلی چمکی اور گرج کی آواز آئی۔ پھر زور سے بارش شروع ہو گئی۔ بوندیں کھڑکیوں پر ٹپ ٹپ کر رہی تھیں۔ سڑکوں پر پانی بھر گیا۔ بچے بہت خوش تھے۔",
+        "transliteration": "Aasman mein kaale badal chhaye hue the. Hawa tez chal rahi thi. Darakht hil rahe the. Parinde apne ghonsalon mein chhup gaye. Achanak bijli chamki aur garaj ki awaaz aayi. Phir zor se barish shuru ho gayi. Boondein khirkiyon par tap tap kar rahi thin. Sarkon par pani bhar gaya. Bachhe bohat khush the.",
+        "englishMeaning": "There were black clouds in the sky. The wind was blowing strongly. The trees were swaying. The birds hid in their nests. Suddenly lightning flashed and there was a sound of thunder. Then heavy rain started. Drops were tapping on the windows. The streets filled with water. The children were very happy.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "گھونسلوں",
+            "transliteration": "ghonsalon",
+            "meaning": "nests"
+          },
+          {
+            "word": "اچانک",
+            "transliteration": "achanak",
+            "meaning": "suddenly"
+          },
+          {
+            "word": "کھڑکیوں",
+            "transliteration": "khirkiyon",
+            "meaning": "windows"
+          }
+        ],
+        "difficultWords": [
+          "گھونسلوں",
+          "اچانک",
+          "کھڑکیوں"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "شہر کا سفر",
+    "description": "شہر کی سیر اور سفر",
+    "difficulty": 3,
+    "chapters": [
+      {
+        "chapterNumber": 1,
+        "urduText": "ہم نے شہر جانے کا فیصلہ کیا۔ صبح سویرے ہم بس میں بیٹھ گئے۔ سفر لمبا لیکن دلچسپ تھا۔ راستے میں ہم نے خوبصورت پہاڑ دیکھے۔ کچھ دیہات بھی نظر آئے۔ کسان کھیتوں میں کام کر رہے تھے۔ دوپہر کے وقت ہم شہر پہنچ گئے۔ شہر بہت بڑا اور مصروف تھا۔ ہر طرف گاڑیاں اور لوگ تھے۔ عمارتیں بلند اور شاندار تھیں۔",
+        "transliteration": "Hum ne shehar jane ka faisla kiya. Subah sawere hum bus mein baith gaye. Safar lamba lekin dilchasp tha. Raste mein hum ne khubsurat pahar dekhe. Kuch dehaat bhi nazar aaye. Kisan kheton mein kaam kar rahe the. Dopehar ke waqt hum shehar pohunch gaye. Shehar bohat bara aur masroof tha. Har taraf gaariyan aur log the. Imaraten buland aur shandar thin.",
+        "englishMeaning": "We decided to go to the city. Early in the morning we sat in the bus. The journey was long but interesting. On the way we saw beautiful mountains. Some villages also appeared. Farmers were working in the fields. At noon we reached the city. The city was very big and busy. There were vehicles and people everywhere. The buildings were tall and magnificent.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "فیصلہ",
+            "transliteration": "faisla",
+            "meaning": "decision"
+          },
+          {
+            "word": "دلچسپ",
+            "transliteration": "dilchasp",
+            "meaning": "interesting"
+          },
+          {
+            "word": "مصروف",
+            "transliteration": "masroof",
+            "meaning": "busy"
+          },
+          {
+            "word": "عمارتیں",
+            "transliteration": "imaraten",
+            "meaning": "buildings"
+          }
+        ],
+        "difficultWords": [
+          "فیصلہ",
+          "دلچسپ",
+          "مصروف",
+          "عمارتیں"
+        ]
+      },
+      {
+        "chapterNumber": 2,
+        "urduText": "ہم نے پہلے بازار کا دورہ کیا۔ دکانیں رنگ برنگی چیزوں سے بھری ہوئی تھیں۔ میں نے اپنی بہن کے لیے ایک خوبصورت کتاب خریدی۔ پھر ہم ایک ریستوراں میں گئے۔ وہاں کا کھانا بہت لذیذ تھا۔ دوپہر بعد ہم نے ایک عجائب گھر دیکھا۔ وہاں پرانی چیزیں اور تاریخی نمونے تھے۔ سب کچھ دلچسپ تھا۔ شام کو تھکے ہوئے لیکن خوش واپس آئے۔ یہ ایک یادگار دن تھا۔",
+        "transliteration": "Hum ne pehle bazaar ka daura kiya. Dukanein rang birangi cheezon se bhari hui thin. Main ne apni behan ke liye aik khubsurat kitab kharidi. Phir hum aik restaurant mein gaye. Wahan ka khana bohat laziz tha. Dopehar baad hum ne aik ajaib ghar dekha. Wahan purani cheezein aur tarikhi namoone the. Sab kuch dilchasp tha. Shaam ko thake hue lekin khush wapas aaye. Yeh aik yadgar din tha.",
+        "englishMeaning": "We first visited the market. The shops were full of colorful things. I bought a beautiful book for my sister. Then we went to a restaurant. The food there was very delicious. In the afternoon we saw a museum. There were old things and historical exhibits. Everything was interesting. In the evening we came back tired but happy. It was a memorable day.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "لذیذ",
+            "transliteration": "laziz",
+            "meaning": "delicious"
+          },
+          {
+            "word": "عجائب",
+            "transliteration": "ajaib",
+            "meaning": "wonders/marvels"
+          },
+          {
+            "word": "تاریخی",
+            "transliteration": "tarikhi",
+            "meaning": "historical"
+          },
+          {
+            "word": "یادگار",
+            "transliteration": "yadgar",
+            "meaning": "memorable"
+          }
+        ],
+        "difficultWords": [
+          "عجائب",
+          "تاریخی",
+          "یادگار",
+          "لذیذ"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "صحت مند عادات",
+    "description": "صحت مند رہنے کی آسان عادتیں",
+    "difficulty": 4,
+    "chapters": [
+      {
+        "chapterNumber": 1,
+        "urduText": "میں نے صحت مند رہنے کے لیے نئی عادات اپنائیں۔ صبح جلدی اٹھتا ہوں اور ہلکی ورزش کرتا ہوں۔ ورزش کے بعد میں پانی پیتا ہوں اور ناشتہ وقت پر کرتا ہوں۔ ناشتہ میں پھل، دودھ اور انڈہ لیتا ہوں۔ دن میں کم از کم آٹھ گلاس پانی پیتا ہوں۔",
+        "transliteration": "Main ne sehat mand rehne ke liye nayi aadatain apnayin. Subah jaldi uthta hoon aur halki warzish karta hoon. Warzish ke baad main pani peeta hoon aur nashta waqt par karta hoon. Nashta mein phal, doodh aur anda leta hoon. Din mein kam az kam aath glass pani peeta hoon.",
+        "englishMeaning": "I adopted new habits to stay healthy. I wake up early and do light exercise. After exercise I drink water and have breakfast on time. At breakfast I take fruit, milk, and an egg. During the day I drink at least eight glasses of water.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "عادات",
+            "transliteration": "aadatain",
+            "meaning": "habits"
+          },
+          {
+            "word": "ورزش",
+            "transliteration": "warzish",
+            "meaning": "exercise"
+          },
+          {
+            "word": "ناشتہ",
+            "transliteration": "nashta",
+            "meaning": "breakfast"
+          }
+        ],
+        "difficultWords": [
+          "عادات",
+          "ورزش",
+          "ناشتہ"
+        ]
+      },
+      {
+        "chapterNumber": 2,
+        "urduText": "میں رات کو دیر سے نہیں سوتا۔ موبائل استعمال کم کرتا ہوں اور سونے سے پہلے کتاب پڑھتا ہوں۔ ہفتے میں دو بار پارک میں تیز سیر کرتا ہوں۔ میں فاسٹ فوڈ کم کھاتا ہوں اور سبزیوں کو ترجیح دیتا ہوں۔",
+        "transliteration": "Main raat ko der se nahi sota. Mobile istemal kam karta hoon aur sone se pehle kitab parhta hoon. Hafte mein do baar park mein tez sair karta hoon. Main fast food kam khata hoon aur sabziyon ko tarjeeh deta hoon.",
+        "englishMeaning": "I do not sleep late at night. I use my phone less and read a book before sleeping. Twice a week I take a brisk walk in the park. I eat less fast food and give preference to vegetables.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "سیر",
+            "transliteration": "sair",
+            "meaning": "walk/stroll"
+          },
+          {
+            "word": "فاسٹ",
+            "transliteration": "fast",
+            "meaning": "fast"
+          },
+          {
+            "word": "فوڈ",
+            "transliteration": "food",
+            "meaning": "food"
+          },
+          {
+            "word": "ترجیح",
+            "transliteration": "tarjeeh",
+            "meaning": "preference"
+          }
+        ],
+        "difficultWords": [
+          "سیر",
+          "ترجیح",
+          "فاسٹ",
+          "فوڈ"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "قدرتی آفات کی تیاری",
+    "description": "ہنگامی حالات میں احتیاط",
+    "difficulty": 5,
+    "chapters": [
+      {
+        "chapterNumber": 1,
+        "urduText": "ہمارے علاقے میں بارشیں اچانک تیز ہو جاتی ہیں، اس لیے ہم نے ہنگامی منصوبہ بنایا۔ گھر میں ضروری سامان جیسے ٹارچ، بیٹری، ابتدائی طبی امداد اور صاف پانی رکھا ہے۔ ہم نے خاندان کے لیے رابطہ نمبر ایک کاغذ پر لکھ کر محفوظ جگہ پر رکھا ہے۔ محلے کے لوگوں نے مل کر ایک محفوظ پناہ گاہ کی نشاندہی کی ہے۔ مشکل وقت میں نظم و ضبط اور تعاون بہت اہم ہیں۔",
+        "transliteration": "Hamare ilaqe mein barishein achanak tez ho jati hain, is liye hum ne hangami mansuba banaya. Ghar mein zaroori samaan jaise torch, battery, ibtidaai tibbi imdaad aur saaf pani rakha hai. Hum ne khandan ke liye rabta number aik kaghaz par likh kar mehfooz jagah par rakha hai. Muhalle ke logon ne mil kar aik mehfooz panah gaah ki nishandahi ki hai. Mushkil waqt mein nazm o zabt aur taawun bohat aham hain.",
+        "englishMeaning": "In our area, rains suddenly become heavy, so we made an emergency plan. At home we keep essential items such as a torch, batteries, first aid, and clean water. We wrote contact numbers for the family and kept them in a safe place. People in the neighborhood together identified a safe shelter. In difficult times, discipline and cooperation are very important.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "ہنگامی",
+            "transliteration": "hangami",
+            "meaning": "emergency"
+          },
+          {
+            "word": "منصوبہ",
+            "transliteration": "mansuba",
+            "meaning": "plan"
+          },
+          {
+            "word": "محفوظ",
+            "transliteration": "mehfooz",
+            "meaning": "safe"
+          },
+          {
+            "word": "پناہ",
+            "transliteration": "panah",
+            "meaning": "shelter/refuge"
+          },
+          {
+            "word": "تعاون",
+            "transliteration": "taawun",
+            "meaning": "cooperation"
+          }
+        ],
+        "difficultWords": [
+          "ہنگامی",
+          "منصوبہ",
+          "محفوظ",
+          "پناہ",
+          "تعاون"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "گم شدہ خط",
+    "description": "ایک دلچسپ راز اور دوستی کی کہانی",
+    "difficulty": 3,
+    "chapters": [
+      {
+        "chapterNumber": 1,
+        "urduText": "عائشہ کو پرانی الماری صاف کرتے ہوئے ایک زرد لفافہ ملا۔ لفافے پر نام صاف نہیں تھا مگر اندر ایک خط تھا۔ خط میں لکھا تھا کہ اگر یہ خط تمہیں ملے تو دریا کے کنارے والے نیم کے درخت کے پاس آنا۔ عائشہ نے سوچا یہ کس کا راز ہے۔ اس نے اپنی دوست سارہ کو فون کیا۔ دونوں نے فیصلہ کیا کہ شام کو وہاں جائیں گی۔ دن بھر عائشہ کے ذہن میں ایک ہی سوال تھا: خط کس نے لکھا اور کیوں؟",
+        "transliteration": "Ayesha ko purani almari saaf karte hue aik zard lifafa mila. Lifafe par naam saaf nahi tha magar andar aik khat tha. Khat mein likha tha ke agar yeh khat tumhein mile to darya ke kinare wale neem ke darakht ke paas aana. Ayesha ne socha yeh kis ka raaz hai. Us ne apni dost Sara ko phone kiya. Dono ne faisla kiya ke shaam ko wahan jayen gi. Din bhar Ayesha ke zehan mein aik hi sawal tha: khat kis ne likha aur kyun?",
+        "englishMeaning": "Ayesha found a yellowed envelope while cleaning an old cupboard. The name on the envelope was unclear, but inside was a letter. It said: if this letter reaches you, come to the neem tree by the riverbank. Ayesha wondered whose secret it was. She called her friend Sara. They decided to go there in the evening. All day one question stayed in Ayesha's mind: who wrote the letter and why?",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "لفافہ",
+            "transliteration": "lifafa",
+            "meaning": "envelope"
+          },
+          {
+            "word": "زرد",
+            "transliteration": "zard",
+            "meaning": "yellowed"
+          },
+          {
+            "word": "راز",
+            "transliteration": "raaz",
+            "meaning": "secret"
+          },
+          {
+            "word": "کنارے",
+            "transliteration": "kinare",
+            "meaning": "bank/edge"
+          }
+        ],
+        "difficultWords": [
+          "لفافہ",
+          "زرد",
+          "راز",
+          "کنارے"
+        ]
+      },
+      {
+        "chapterNumber": 2,
+        "urduText": "شام کو دونوں دریا کے کنارے پہنچیں۔ نیم کا درخت ہوا میں ہل رہا تھا۔ عائشہ نے درخت کے پاس ایک پرانا صندوق دیکھا۔ صندوق بند تھا مگر اس کے اوپر چابی لگی ہوئی تھی۔ سارہ نے کہا شاید یہ اسی خط کا اشارہ ہے۔ عائشہ نے ہمت کر کے چابی گھمائی۔ صندوق کھلا تو اندر ایک چھوٹی ڈائری اور چند تصویریں تھیں۔ تصویروں میں عائشہ کے نانا جوان نظر آ رہے تھے۔ عائشہ کو حیرت ہوئی، اسے لگا جیسے ماضی اچانک سامنے آ گیا ہو۔",
+        "transliteration": "Shaam ko dono darya ke kinare pohchein. Neem ka darakht hawa mein hil raha tha. Ayesha ne darakht ke paas aik purana sandook dekha. Sandook band tha magar us ke upar chabi lagi hui thi. Sara ne kaha shayad yeh isi khat ka ishara hai. Ayesha ne himmat kar ke chabi ghumayi. Sandook khula to andar aik chhoti diary aur chand tasveerain thin. Tasveeron mein Ayesha ke nana jawan nazar aa rahe the. Ayesha ko hairat hui, use laga jaise maazi achanak samne aa gaya ho.",
+        "englishMeaning": "In the evening the two reached the riverbank. The neem tree was swaying in the breeze. Ayesha saw an old chest near the tree. It was locked, but a key was attached to it. Sara said maybe this was the clue from the letter. Ayesha gathered courage and turned the key. The chest opened to reveal a small diary and a few photographs. In the photos, Ayesha's grandfather appeared young. Ayesha was astonished; it felt as if the past had suddenly appeared in front of her.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "صندوق",
+            "transliteration": "sandook",
+            "meaning": "chest"
+          },
+          {
+            "word": "چابی",
+            "transliteration": "chabi",
+            "meaning": "key"
+          },
+          {
+            "word": "ڈائری",
+            "transliteration": "diary",
+            "meaning": "diary"
+          },
+          {
+            "word": "حیرت",
+            "transliteration": "hairat",
+            "meaning": "surprise"
+          }
+        ],
+        "difficultWords": [
+          "صندوق",
+          "چابی",
+          "ڈائری",
+          "حیرت"
+        ]
+      },
+      {
+        "chapterNumber": 3,
+        "urduText": "ڈائری کے پہلے صفحے پر نانا نے لکھا تھا کہ یہ درخت ان کی یادوں کا گواہ ہے۔ انہوں نے بتایا کہ انہوں نے یہ صندوق اپنے آخری سفر سے پہلے چھپایا تھا تاکہ خاندان کی کہانی محفوظ رہے۔ عائشہ نے سارہ کو دیکھا اور دونوں مسکرا دیں۔ خط کا راز اب کھل چکا تھا۔ عائشہ نے فیصلہ کیا کہ وہ ڈائری گھر لے جا کر سب کو پڑھ کر سنائے گی۔ اسے لگا کہ وہ اپنے نانا کے قریب آ گئی ہے، جیسے خط نے دو زمانوں کو ملا دیا ہو۔",
+        "transliteration": "Diary ke pehle safhe par nana ne likha tha ke yeh darakht un ki yaadon ka gawah hai. Unhon ne bataya ke unhon ne yeh sandook apne aakhri safar se pehle chhupaya tha taake khandan ki kahani mehfooz rahe. Ayesha ne Sara ko dekha aur dono muskura din. Khat ka raaz ab khul chuka tha. Ayesha ne faisla kiya ke woh diary ghar le ja kar sab ko parh kar sunaye gi. Use laga ke woh apne nana ke qareeb aa gayi hai, jaise khat ne do zamanon ko mila diya ho.",
+        "englishMeaning": "On the first page of the diary, her grandfather wrote that this tree was a witness to his memories. He said he had hidden the chest before his last journey so the family's story would remain safe. Ayesha looked at Sara and both smiled. The letter's mystery was now solved. Ayesha decided to take the diary home and read it to everyone. She felt closer to her grandfather, as if the letter had connected two different times.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "گواہ",
+            "transliteration": "gawah",
+            "meaning": "witness"
+          },
+          {
+            "word": "یادوں",
+            "transliteration": "yaadon",
+            "meaning": "memories"
+          },
+          {
+            "word": "آخری",
+            "transliteration": "aakhri",
+            "meaning": "last"
+          },
+          {
+            "word": "زمانوں",
+            "transliteration": "zamanon",
+            "meaning": "times/eras"
+          }
+        ],
+        "difficultWords": [
+          "گواہ",
+          "یادوں",
+          "آخری",
+          "زمانوں"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "title": "سمندر کا سفر",
+    "description": "سمندر میں ایک یادگار مہم",
+    "difficulty": 4,
+    "chapters": [
+      {
+        "chapterNumber": 1,
+        "urduText": "حارث نے پہلی بار سمندر دیکھنے کا منصوبہ بنایا۔ وہ اپنے دوستوں کے ساتھ بندرگاہ پہنچا تو جہاز کا منظر دیکھ کر خوشی سے بھر گیا۔ کپتان نے بتایا کہ سفر لمبا ہوگا اور موسم بدل سکتا ہے۔ سب نے لائف جیکٹ پہن لی۔ جہاز جب روانہ ہوا تو لہروں نے آہستہ آہستہ اسے ہلانا شروع کیا۔ حارث نے افق کو دیکھا اور دل میں ایک نیا جوش محسوس کیا۔",
+        "transliteration": "Haris ne pehli baar samandar dekhne ka mansuba banaya. Woh apne doston ke saath bandargah pohancha to jahaz ka manzar dekh kar khushi se bhar gaya. Captain ne bataya ke safar lamba hoga aur mausam badal sakta hai. Sab ne life jacket pehan li. Jahaz jab rawana hua to lehron ne aahista aahista use hilana shuru kiya. Haris ne ufaq ko dekha aur dil mein aik naya josh mehsoos kiya.",
+        "englishMeaning": "Haris planned to see the sea for the first time. When he reached the harbor with his friends and saw the ship, he was filled with joy. The captain said the journey would be long and the weather could change. Everyone put on life jackets. When the ship departed, the waves slowly began to sway it. Haris looked at the horizon and felt a new excitement in his heart.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "بندرگاہ",
+            "transliteration": "bandargah",
+            "meaning": "harbor"
+          },
+          {
+            "word": "کپتان",
+            "transliteration": "captain",
+            "meaning": "captain"
+          },
+          {
+            "word": "افق",
+            "transliteration": "ufaq",
+            "meaning": "horizon"
+          },
+          {
+            "word": "جوش",
+            "transliteration": "josh",
+            "meaning": "excitement"
+          }
+        ],
+        "difficultWords": [
+          "بندرگاہ",
+          "کپتان",
+          "افق",
+          "جوش"
+        ]
+      },
+      {
+        "chapterNumber": 2,
+        "urduText": "رات کو سمندر خاموش نہ تھا۔ تیز ہوا چلی اور بادل گھِر آئے۔ جہاز کے عملے نے سب کو اندر رہنے کو کہا۔ حارث نے کھڑکی سے دیکھا تو دور دور تک پانی ہی پانی تھا۔ تھوڑی دیر بعد بارش شروع ہوئی اور جہاز نے اونچی لہروں کا سامنا کیا۔ حارث کو خوف محسوس ہوا مگر وہ حوصلہ رکھے رہا۔ اسے یاد آیا کہ کپتان نے کہا تھا کہ ہر طوفان کے بعد سکون آتا ہے۔",
+        "transliteration": "Raat ko samandar khamosh na tha. Tez hawa chali aur badal ghir aaye. Jahaz ke amle ne sab ko andar rehne ko kaha. Haris ne khirki se dekha to door door tak pani hi pani tha. Thori dair baad barish shuru hui aur jahaz ne oonchi lehron ka samna kiya. Haris ko khauf mehsoos hua magar woh hosla rakhe raha. Use yaad aaya ke captain ne kaha tha ke har toofan ke baad sukoon aata hai.",
+        "englishMeaning": "At night the sea was not calm. Strong winds blew and clouds gathered. The crew told everyone to stay inside. Haris looked through the window and saw water stretching in all directions. Soon it began to rain and the ship faced tall waves. Haris felt fear, but he kept his courage. He remembered the captain's words that after every storm, calm arrives.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "عملے",
+            "transliteration": "amle",
+            "meaning": "crew"
+          },
+          {
+            "word": "لہروں",
+            "transliteration": "lehron",
+            "meaning": "waves"
+          },
+          {
+            "word": "خوف",
+            "transliteration": "khauf",
+            "meaning": "fear"
+          },
+          {
+            "word": "حوصلہ",
+            "transliteration": "hosla",
+            "meaning": "courage"
+          }
+        ],
+        "difficultWords": [
+          "عملے",
+          "لہروں",
+          "خوف",
+          "حوصلہ"
+        ]
+      },
+      {
+        "chapterNumber": 3,
+        "urduText": "اگلی صبح آسمان صاف تھا۔ سورج کی روشنی پانی پر چمک رہی تھی۔ حارث اور اس کے دوست عرشے پر آئے تو ہوا میں نمکین خوشبو تھی۔ انہوں نے دور ایک جزیرہ دیکھا اور سب حیران رہ گئے۔ جہاز آہستہ آہستہ جزیرے کے قریب پہنچا۔ حارث نے محسوس کیا کہ یہ سفر صرف سمندر دیکھنے کا نہیں بلکہ اپنی ہمت آزمانے کا بھی تھا۔",
+        "transliteration": "Agli subah aasman saaf tha. Suraj ki roshni pani par chamak rahi thi. Haris aur us ke dost arshe par aaye to hawa mein namkeen khushboo thi. Unhon ne door aik jazeera dekha aur sab hairan reh gaye. Jahaz aahista aahista jazeere ke qareeb pohancha. Haris ne mehsoos kiya ke yeh safar sirf samandar dekhne ka nahi balkay apni himmat aazmane ka bhi tha.",
+        "englishMeaning": "The next morning the sky was clear. Sunlight sparkled on the water. When Haris and his friends came onto the deck, the air had a salty scent. They saw an island in the distance and were amazed. The ship slowly approached the island. Haris felt this journey was not just about seeing the sea but also about testing his courage.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "عرشے",
+            "transliteration": "arshe",
+            "meaning": "deck"
+          },
+          {
+            "word": "نمکین",
+            "transliteration": "namkeen",
+            "meaning": "salty"
+          },
+          {
+            "word": "جزیرہ",
+            "transliteration": "jazeera",
+            "meaning": "island"
+          },
+          {
+            "word": "آزمانے",
+            "transliteration": "aazmane",
+            "meaning": "to test"
+          }
+        ],
+        "difficultWords": [
+          "عرشے",
+          "نمکین",
+          "جزیرہ",
+          "آزمانے"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "title": "پہاڑی راستہ",
+    "description": "پہاڑوں میں ایک طویل سفر",
+    "difficulty": 5,
+    "chapters": [
+      {
+        "chapterNumber": 1,
+        "urduText": "زین نے فیصلہ کیا کہ وہ سردیوں سے پہلے اپنی نانی کے گاؤں جائے گا۔ گاؤں تک جانے والا پہاڑی راستہ مشکل مگر خوبصورت تھا۔ بس جب بلند موڑوں سے گزری تو نیچے گہری وادی نظر آئی۔ زین نے کھڑکی سے جھانک کر سفید چوٹیوں کو دیکھا۔ راستے میں ایک چھوٹا قافلہ ملا جو لکڑیاں لے جا رہا تھا۔ زین نے سوچا کہ یہ سفر صبر اور ہمت دونوں مانگتا ہے۔",
+        "transliteration": "Zain ne faisla kiya ke woh sardiyon se pehle apni nani ke gaon jayega. Gaon tak jane wala pahari rasta mushkil magar khubsurat tha. Bus jab buland moron se guzri to neeche gehri wadi nazar aayi. Zain ne khirki se jhaank kar safed chotiyon ko dekha. Raste mein aik chhota qafla mila jo lakriyan le ja raha tha. Zain ne socha ke yeh safar sabr aur himmat dono mangta hai.",
+        "englishMeaning": "Zain decided to visit his grandmother's village before winter. The mountain road to the village was difficult but beautiful. When the bus passed high turns, a deep valley could be seen below. Zain looked out the window at the white peaks. On the way he saw a small caravan carrying firewood. Zain thought this journey required both patience and courage.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "وادی",
+            "transliteration": "wadi",
+            "meaning": "valley"
+          },
+          {
+            "word": "چوٹیوں",
+            "transliteration": "chotiyon",
+            "meaning": "peaks"
+          },
+          {
+            "word": "قافلہ",
+            "transliteration": "qafla",
+            "meaning": "caravan"
+          },
+          {
+            "word": "صبر",
+            "transliteration": "sabr",
+            "meaning": "patience"
+          },
+          {
+            "word": "ہمت",
+            "transliteration": "himmat",
+            "meaning": "courage"
+          }
+        ],
+        "difficultWords": [
+          "وادی",
+          "چوٹیوں",
+          "قافلہ",
+          "صبر",
+          "ہمت"
+        ]
+      },
+      {
+        "chapterNumber": 2,
+        "urduText": "شام تک بس آخری اسٹاپ پر پہنچی۔ وہاں سے زین کو پیدل چلنا تھا۔ راستہ تنگ تھا اور برف کے ذرے ہوا میں اڑ رہے تھے۔ زین نے اپنی شال مضبوطی سے لپیٹی اور قدم سنبھال کر رکھا۔ تھوڑی دیر بعد اسے نانی کا گھر نظر آیا۔ دروازہ کھلا تو نانی نے مسکرا کر استقبال کیا۔ زین کو لگا کہ اس کا سفر مکمل ہو گیا اور دل میں عجیب سکون بھر گیا۔",
+        "transliteration": "Shaam tak bus aakhri stop par pohanchi. Wahan se Zain ko paidal chalna tha. Rasta tang tha aur barf ke zarre hawa mein ur rahe the. Zain ne apni shaal mazbooti se lapeti aur qadam sambhal kar rakha. Thori dair baad use nani ka ghar nazar aaya. Darwaza khula to nani ne muskura kar istaqbal kiya. Zain ko laga ke us ka safar mukammal ho gaya aur dil mein ajeeb sukoon bhar gaya.",
+        "englishMeaning": "By evening the bus reached the last stop. From there Zain had to walk. The path was narrow and snow particles were flying in the wind. Zain wrapped his shawl tightly and walked carefully. After some time he saw his grandmother's house. When the door opened, she welcomed him with a smile. Zain felt his journey was complete, and a strange calm filled his heart.",
+        "audioUrl": "",
+        "vocab": [
+          {
+            "word": "ذرے",
+            "transliteration": "zarre",
+            "meaning": "particles"
+          },
+          {
+            "word": "شال",
+            "transliteration": "shaal",
+            "meaning": "shawl"
+          },
+          {
+            "word": "استقبال",
+            "transliteration": "istaqbal",
+            "meaning": "welcome"
+          },
+          {
+            "word": "سکون",
+            "transliteration": "sukoon",
+            "meaning": "calm/peace"
+          }
+        ],
+        "difficultWords": [
+          "ذرے",
+          "شال",
+          "استقبال",
+          "سکون"
+        ]
+      }
+    ]
+  }
+]
+    </script>
+    <script id="grammarData" type="application/json">
+[
+  {
+    "id": 1,
+    "title": "ضمیر",
+    "subtitle": "شخصی ضمیریں",
+    "explanation": "اردو میں ضمیر وہ الفاظ ہیں جو اسم کی جگہ استعمال ہوتے ہیں۔ بنیادی ضمیریں یہ ہیں: میں، تم، آپ، وہ، یہ، ہم۔ عزت کے ساتھ بات کرنے کے لیے ہمیشہ 'آپ' استعمال کریں۔",
+    "examples": [
+      {
+        "urdu": "میں طالب علم ہوں۔",
+        "transliteration": "Main talib-e-ilm hoon.",
+        "meaning": "I am a student."
+      },
+      {
+        "urdu": "تم میرے دوست ہو۔",
+        "transliteration": "Tum mere dost ho.",
+        "meaning": "You are my friend. (informal)"
+      },
+      {
+        "urdu": "آپ کیسے ہیں؟",
+        "transliteration": "Aap kaise hain?",
+        "meaning": "How are you? (formal/respectful)"
+      },
+      {
+        "urdu": "وہ استاد ہیں۔",
+        "transliteration": "Woh ustad hain.",
+        "meaning": "He/She is a teacher."
+      },
+      {
+        "urdu": "ہم سکول جاتے ہیں۔",
+        "transliteration": "Hum school jate hain.",
+        "meaning": "We go to school."
+      }
+    ],
+    "exercise": {
+      "question": "درست ضمیر منتخب کریں: ___ طالب علم ہوں۔",
+      "options": [
+        "میں",
+        "تم",
+        "وہ",
+        "آپ"
+      ],
+      "correctAnswer": 0
+    }
+  },
+  {
+    "id": 2,
+    "title": "حال",
+    "subtitle": "ہوں / ہے / ہیں",
+    "explanation": "حال کے زمانے میں 'ہونا' فعل کی شکلیں یہ ہیں: ہوں (میں کے لیے)، ہو (تم کے لیے)، ہے (وہ/یہ کے لیے)، ہیں (آپ/ہم/وہ جمع کے لیے)۔",
+    "examples": [
+      {
+        "urdu": "میں خوش ہوں۔",
+        "transliteration": "Main khush hoon.",
+        "meaning": "I am happy."
+      },
+      {
+        "urdu": "تم تھکے ہو۔",
+        "transliteration": "Tum thake ho.",
+        "meaning": "You are tired."
+      },
+      {
+        "urdu": "وہ ڈاکٹر ہے۔",
+        "transliteration": "Woh doctor hai.",
+        "meaning": "He/She is a doctor."
+      },
+      {
+        "urdu": "آپ صحیح ہیں۔",
+        "transliteration": "Aap sahi hain.",
+        "meaning": "You are correct. (formal)"
+      },
+      {
+        "urdu": "ہم گھر میں ہیں۔",
+        "transliteration": "Hum ghar mein hain.",
+        "meaning": "We are at home."
+      },
+      {
+        "urdu": "یہ کتاب ہے۔",
+        "transliteration": "Yeh kitab hai.",
+        "meaning": "This is a book."
+      }
+    ],
+    "exercise": {
+      "question": "صحیح فعل منتخب کریں: میں طالب علم ___۔",
+      "options": [
+        "ہوں",
+        "ہو",
+        "ہے",
+        "ہیں"
+      ],
+      "correctAnswer": 0
+    }
+  },
+  {
+    "id": 3,
+    "title": "ماضی",
+    "subtitle": "تھا / تھی / تھے",
+    "explanation": "ماضی میں 'تھا' استعمال ہوتا ہے۔ مذکر واحد کے لیے 'تھا'، مؤنث واحد کے لیے 'تھی' اور جمع کے لیے 'تھے' استعمال ہوتا ہے۔",
+    "examples": [
+      {
+        "urdu": "میں بیمار تھا۔",
+        "transliteration": "Main bimar tha.",
+        "meaning": "I was sick. (masculine)"
+      },
+      {
+        "urdu": "وہ خوش تھی۔",
+        "transliteration": "Woh khush thi.",
+        "meaning": "She was happy. (feminine)"
+      },
+      {
+        "urdu": "ہم سکول میں تھے۔",
+        "transliteration": "Hum school mein the.",
+        "meaning": "We were at school."
+      },
+      {
+        "urdu": "کتاب میز پر تھی۔",
+        "transliteration": "Kitab mez par thi.",
+        "meaning": "The book was on the table."
+      },
+      {
+        "urdu": "بچے باغ میں تھے۔",
+        "transliteration": "Bachhe bagh mein the.",
+        "meaning": "The children were in the garden."
+      }
+    ],
+    "exercise": {
+      "question": "صحیح فعل منتخب کریں: وہ (لڑکی) خوش ___۔",
+      "options": [
+        "تھا",
+        "تھی",
+        "تھے",
+        "ہے"
+      ],
+      "correctAnswer": 1
+    }
+  },
+  {
+    "id": 4,
+    "title": "جملے کی ترتیب",
+    "subtitle": "فاعل - مفعول - فعل",
+    "explanation": "اردو میں جملے کی بنیادی ترتیب یہ ہے: فاعل - مفعول - فعل۔ مثال کے طور پر: 'میں کتاب پڑھتا ہوں'۔",
+    "examples": [
+      {
+        "urdu": "میں سیب کھاتا ہوں۔",
+        "transliteration": "Main seb khata hoon.",
+        "meaning": "I eat an apple."
+      },
+      {
+        "urdu": "وہ اردو بولتی ہے۔",
+        "transliteration": "Woh Urdu bolti hai.",
+        "meaning": "She speaks Urdu."
+      },
+      {
+        "urdu": "ہم کرکٹ کھیلتے ہیں۔",
+        "transliteration": "Hum cricket khelte hain.",
+        "meaning": "We play cricket."
+      },
+      {
+        "urdu": "بچے پانی پیتے ہیں۔",
+        "transliteration": "Bachhe pani peete hain.",
+        "meaning": "Children drink water."
+      }
+    ],
+    "exercise": {
+      "question": "صحیح ترتیب منتخب کریں:",
+      "options": [
+        "میں کتاب پڑھتا ہوں",
+        "کتاب میں پڑھتا ہوں",
+        "پڑھتا ہوں میں کتاب",
+        "میں پڑھتا کتاب ہوں"
+      ],
+      "correctAnswer": 0
+    }
+  },
+  {
+    "id": 5,
+    "title": "عام فقرے",
+    "subtitle": "ادب والے روزمرہ جملے",
+    "explanation": "روزمرہ کی گفتگو میں یہ فقرے بہت مفید ہیں۔ ان کا استعمال آپ کو مہذب اور شائستہ بناتا ہے۔",
+    "examples": [
+      {
+        "urdu": "السلام علیکم",
+        "transliteration": "Assalam-o-Alaikum",
+        "meaning": "Peace be upon you (greeting)"
+      },
+      {
+        "urdu": "وعلیکم السلام",
+        "transliteration": "Wa-Alaikum-Assalam",
+        "meaning": "And peace be upon you (response)"
+      },
+      {
+        "urdu": "شکریہ",
+        "transliteration": "Shukriya",
+        "meaning": "Thank you"
+      },
+      {
+        "urdu": "براہ کرم",
+        "transliteration": "Barah-e-karam",
+        "meaning": "Please"
+      },
+      {
+        "urdu": "معاف کیجیے",
+        "transliteration": "Maaf kijiye",
+        "meaning": "Sorry / Excuse me"
+      },
+      {
+        "urdu": "خدا حافظ",
+        "transliteration": "Khuda Hafiz",
+        "meaning": "Goodbye (God protect you)"
+      },
+      {
+        "urdu": "آپ کا نام کیا ہے؟",
+        "transliteration": "Aap ka naam kya hai?",
+        "meaning": "What is your name?"
+      },
+      {
+        "urdu": "میرا نام ___ ہے۔",
+        "transliteration": "Mera naam ___ hai.",
+        "meaning": "My name is ___."
+      },
+      {
+        "urdu": "آپ کیسے ہیں؟",
+        "transliteration": "Aap kaise hain?",
+        "meaning": "How are you?"
+      },
+      {
+        "urdu": "میں ٹھیک ہوں، شکریہ۔",
+        "transliteration": "Main theek hoon, shukriya.",
+        "meaning": "I am fine, thank you."
+      }
+    ],
+    "exercise": {
+      "question": "کسی سے ملتے وقت کیا کہنا چاہیے؟",
+      "options": [
+        "السلام علیکم",
+        "خدا حافظ",
+        "شکریہ",
+        "معاف کیجیے"
+      ],
+      "correctAnswer": 0
+    }
+  },
+  {
+    "id": 6,
+    "title": "سوالیہ الفاظ",
+    "subtitle": "سوال بنانے کے الفاظ",
+    "explanation": "اردو میں سوال پوچھنے کے لیے یہ الفاظ استعمال ہوتے ہیں: کیا، کون، کہاں، کب، کیوں، کیسے۔",
+    "examples": [
+      {
+        "urdu": "آپ کا نام کیا ہے؟",
+        "transliteration": "Aap ka naam kya hai?",
+        "meaning": "What is your name?"
+      },
+      {
+        "urdu": "یہ کون ہے؟",
+        "transliteration": "Yeh kaun hai?",
+        "meaning": "Who is this?"
+      },
+      {
+        "urdu": "آپ کہاں رہتے ہیں؟",
+        "transliteration": "Aap kahan rehte hain?",
+        "meaning": "Where do you live?"
+      },
+      {
+        "urdu": "آپ کب آئیں گے؟",
+        "transliteration": "Aap kab aayein ge?",
+        "meaning": "When will you come?"
+      },
+      {
+        "urdu": "آپ کیوں دیر سے آئے؟",
+        "transliteration": "Aap kyun der se aaye?",
+        "meaning": "Why did you come late?"
+      },
+      {
+        "urdu": "یہ کیسے ہوا؟",
+        "transliteration": "Yeh kaise hua?",
+        "meaning": "How did this happen?"
+      }
+    ],
+    "exercise": {
+      "question": "صحیح سوالیہ لفظ منتخب کریں: آپ ___ رہتے ہیں؟",
+      "options": [
+        "کہاں",
+        "کیا",
+        "کون",
+        "کیوں"
+      ],
+      "correctAnswer": 0
+    }
+  },
+  {
+    "id": 7,
+    "title": "صفت",
+    "subtitle": "اسم کی کیفیت بیان کرنا",
+    "explanation": "صفت وہ الفاظ ہیں جو اسم کی خوبی یا حالت بیان کرتے ہیں۔ اردو میں صفت عموماً اسم سے پہلے آتی ہے، جیسے 'اچھا لڑکا'۔ صفتیں مذکر/مؤنث اور واحد/جمع کے مطابق بدلتی ہیں۔",
+    "examples": [
+      {
+        "urdu": "بڑا گھر",
+        "transliteration": "Bara ghar",
+        "meaning": "Big house"
+      },
+      {
+        "urdu": "چھوٹی گاڑی",
+        "transliteration": "Chhoti gaari",
+        "meaning": "Small car"
+      },
+      {
+        "urdu": "خوبصورت پھول",
+        "transliteration": "Khubsurat phool",
+        "meaning": "Beautiful flower"
+      },
+      {
+        "urdu": "نیا کمرہ",
+        "transliteration": "Naya kamra",
+        "meaning": "New room"
+      },
+      {
+        "urdu": "پرانی کتاب",
+        "transliteration": "Purani kitab",
+        "meaning": "Old book"
+      },
+      {
+        "urdu": "تیز رفتار",
+        "transliteration": "Tez raftaar",
+        "meaning": "Fast speed"
+      }
+    ],
+    "exercise": {
+      "question": "صحیح صفت منتخب کریں: ___ لڑکی",
+      "options": [
+        "خوبصورت",
+        "بڑا",
+        "نیا",
+        "تیز"
+      ],
+      "correctAnswer": 0
+    }
+  }
+]
+
+    </script>
+    <script src="app.js"></script>
+</body>
+</html>
